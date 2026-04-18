@@ -1,38 +1,35 @@
-package com.payment.common;
+package com.payment.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
+import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import java.math.BigDecimal;
 import java.time.Instant;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.DecimalMin;
-import jakarta.validation.constraints.Size;
-import jakarta.validation.constraints.Pattern;
-import jakarta.validation.constraints.PastOrPresent;
 
-public class PaymentEvent {
-    @NotNull(message = "Payment ID must be a valid UUID")
+@Entity
+@Table(name = "payments")
+public class Payment {
+    @Id
+    @Column(name = "payment_id")
     private String paymentId;
 
-    @NotBlank(message = "Debit account ID must not be blank")
+    @Column(name = "debit_account_id")
     private String debitAccountId;
 
-    @NotBlank(message = "Credit account ID must not be blank")
+    @Column(name = "credit_account_id")
     private String creditAccountId;
 
-    @NotNull(message = "Amount must be greater than 0")
-    @DecimalMin(value = "0.01", message = "Amount must be greater than 0")
+    @Column(name = "amount")
     private BigDecimal amount;
 
-    @NotBlank(message = "Currency must be a 3-character ISO code")
-    @Size(min = 3, max = 3, message = "Currency must be a 3-character ISO code")
+    @Column(name = "currency")
     private String currency;
 
-    @Size(max = 35, message = "Reference must not exceed 35 characters")
+    @Column(name = "reference")
     private String reference;
 
-    @NotNull(message = "Timestamp must not be in the future")
-    @PastOrPresent(message = "Timestamp must not be in the future")
+    @Column(name = "timestamp")
     private Instant timestamp;
 
     // Getters and Setters

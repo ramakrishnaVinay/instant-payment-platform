@@ -5,6 +5,8 @@ import com.payment.service.KafkaProducerService;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import jakarta.validation.Valid;
+import org.springframework.http.HttpStatus;
+import org.springframework.web.server.ResponseStatusException;
 
 
 @RestController
@@ -16,7 +18,14 @@ public class PaymentController {
 
  @PostMapping
  public String create(@Valid @RequestBody PaymentEvent event) {
-   producer.send(event);
-   return "ACCEPTED";
+   try {
+     producer.send(event);
+     return "ACCEPTED";
+   } catch (RuntimeException ex) {
+     if ("No payment found for the given debit and credit account IDs".equals(ex.getMessage())) {
+       throw new ResponseStatusException(HttpStatus.NOT_FOUND, ex.getMessage());
+     }
+     throw ex;
+   }
  }
 }
